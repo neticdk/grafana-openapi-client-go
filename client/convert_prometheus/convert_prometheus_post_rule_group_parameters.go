@@ -79,8 +79,8 @@ type ConvertPrometheusPostRuleGroupParams struct {
 	// XGrafanaAlertingFolderUID.
 	XGrafanaAlertingFolderUID *string
 
-	// XGrafanaAlertingNotificationReceiver.
-	XGrafanaAlertingNotificationReceiver *string
+	// XGrafanaAlertingNotificationSettings.
+	XGrafanaAlertingNotificationSettings *string
 
 	// XGrafanaAlertingRecordingRulesPaused.
 	XGrafanaAlertingRecordingRulesPaused *bool
@@ -196,15 +196,15 @@ func (o *ConvertPrometheusPostRuleGroupParams) SetXGrafanaAlertingFolderUID(xGra
 	o.XGrafanaAlertingFolderUID = xGrafanaAlertingFolderUID
 }
 
-// WithXGrafanaAlertingNotificationReceiver adds the xGrafanaAlertingNotificationReceiver to the convert prometheus post rule group params
-func (o *ConvertPrometheusPostRuleGroupParams) WithXGrafanaAlertingNotificationReceiver(xGrafanaAlertingNotificationReceiver *string) *ConvertPrometheusPostRuleGroupParams {
-	o.SetXGrafanaAlertingNotificationReceiver(xGrafanaAlertingNotificationReceiver)
+// WithXGrafanaAlertingNotificationSettings adds the xGrafanaAlertingNotificationSettings to the convert prometheus post rule group params
+func (o *ConvertPrometheusPostRuleGroupParams) WithXGrafanaAlertingNotificationSettings(xGrafanaAlertingNotificationSettings *string) *ConvertPrometheusPostRuleGroupParams {
+	o.SetXGrafanaAlertingNotificationSettings(xGrafanaAlertingNotificationSettings)
 	return o
 }
 
-// SetXGrafanaAlertingNotificationReceiver adds the xGrafanaAlertingNotificationReceiver to the convert prometheus post rule group params
-func (o *ConvertPrometheusPostRuleGroupParams) SetXGrafanaAlertingNotificationReceiver(xGrafanaAlertingNotificationReceiver *string) {
-	o.XGrafanaAlertingNotificationReceiver = xGrafanaAlertingNotificationReceiver
+// SetXGrafanaAlertingNotificationSettings adds the xGrafanaAlertingNotificationSettings to the convert prometheus post rule group params
+func (o *ConvertPrometheusPostRuleGroupParams) SetXGrafanaAlertingNotificationSettings(xGrafanaAlertingNotificationSettings *string) {
+	o.XGrafanaAlertingNotificationSettings = xGrafanaAlertingNotificationSettings
 }
 
 // WithXGrafanaAlertingRecordingRulesPaused adds the xGrafanaAlertingRecordingRulesPaused to the convert prometheus post rule group params
@@ -271,10 +271,10 @@ func (o *ConvertPrometheusPostRuleGroupParams) WriteToRequest(r runtime.ClientRe
 		}
 	}
 
-	if o.XGrafanaAlertingNotificationReceiver != nil {
+	if o.XGrafanaAlertingNotificationSettings != nil {
 
-		// header param x-grafana-alerting-notification-receiver
-		if err := r.SetHeaderParam("x-grafana-alerting-notification-receiver", *o.XGrafanaAlertingNotificationReceiver); err != nil {
+		// header param x-grafana-alerting-notification-settings
+		if err := r.SetHeaderParam("x-grafana-alerting-notification-settings", *o.XGrafanaAlertingNotificationSettings); err != nil {
 			return err
 		}
 	}

@@ -30,6 +30,12 @@ func (o *RestoreDashboardVersionByUIDReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewRestoreDashboardVersionByUIDBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 401:
 		result := NewRestoreDashboardVersionByUIDUnauthorized()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -120,6 +126,76 @@ func (o *RestoreDashboardVersionByUIDOK) GetPayload() *models.RestoreDashboardVe
 func (o *RestoreDashboardVersionByUIDOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.RestoreDashboardVersionByUIDOKBody)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewRestoreDashboardVersionByUIDBadRequest creates a RestoreDashboardVersionByUIDBadRequest with default headers values
+func NewRestoreDashboardVersionByUIDBadRequest() *RestoreDashboardVersionByUIDBadRequest {
+	return &RestoreDashboardVersionByUIDBadRequest{}
+}
+
+/*
+RestoreDashboardVersionByUIDBadRequest describes a response with status code 400, with default header values.
+
+BadRequestError is returned when the request is invalid and it cannot be processed.
+*/
+type RestoreDashboardVersionByUIDBadRequest struct {
+	Payload *models.ErrorResponseBody
+}
+
+// IsSuccess returns true when this restore dashboard version by Uid bad request response has a 2xx status code
+func (o *RestoreDashboardVersionByUIDBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this restore dashboard version by Uid bad request response has a 3xx status code
+func (o *RestoreDashboardVersionByUIDBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this restore dashboard version by Uid bad request response has a 4xx status code
+func (o *RestoreDashboardVersionByUIDBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this restore dashboard version by Uid bad request response has a 5xx status code
+func (o *RestoreDashboardVersionByUIDBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this restore dashboard version by Uid bad request response a status code equal to that given
+func (o *RestoreDashboardVersionByUIDBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the restore dashboard version by Uid bad request response
+func (o *RestoreDashboardVersionByUIDBadRequest) Code() int {
+	return 400
+}
+
+func (o *RestoreDashboardVersionByUIDBadRequest) Error() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /dashboards/uid/{uid}/restore][%d] restoreDashboardVersionByUidBadRequest %s", 400, payload)
+}
+
+func (o *RestoreDashboardVersionByUIDBadRequest) String() string {
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /dashboards/uid/{uid}/restore][%d] restoreDashboardVersionByUidBadRequest %s", 400, payload)
+}
+
+func (o *RestoreDashboardVersionByUIDBadRequest) GetPayload() *models.ErrorResponseBody {
+	return o.Payload
+}
+
+func (o *RestoreDashboardVersionByUIDBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponseBody)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

@@ -70,7 +70,7 @@ GetDashboardVersionsByUIDOK describes a response with status code 200, with defa
 (empty)
 */
 type GetDashboardVersionsByUIDOK struct {
-	Payload []*models.DashboardVersionMeta
+	Payload *models.DashboardVersionResponseMeta
 }
 
 // IsSuccess returns true when this get dashboard versions by Uid Ok response has a 2xx status code
@@ -113,14 +113,16 @@ func (o *GetDashboardVersionsByUIDOK) String() string {
 	return fmt.Sprintf("[GET /dashboards/uid/{uid}/versions][%d] getDashboardVersionsByUidOk %s", 200, payload)
 }
 
-func (o *GetDashboardVersionsByUIDOK) GetPayload() []*models.DashboardVersionMeta {
+func (o *GetDashboardVersionsByUIDOK) GetPayload() *models.DashboardVersionResponseMeta {
 	return o.Payload
 }
 
 func (o *GetDashboardVersionsByUIDOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.DashboardVersionResponseMeta)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

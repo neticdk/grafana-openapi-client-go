@@ -91,6 +91,9 @@ type ClientService interface {
 	ImportDashboard(body *models.ImportDashboardRequest, opts ...ClientOption) (*ImportDashboardOK, error)
 	ImportDashboardWithParams(params *ImportDashboardParams, opts ...ClientOption) (*ImportDashboardOK, error)
 
+	InterpolateDashboard(opts ...ClientOption) (*InterpolateDashboardOK, error)
+	InterpolateDashboardWithParams(params *InterpolateDashboardParams, opts ...ClientOption) (*InterpolateDashboardOK, error)
+
 	ListPublicDashboards(opts ...ClientOption) (*ListPublicDashboardsOK, error)
 	ListPublicDashboardsWithParams(params *ListPublicDashboardsParams, opts ...ClientOption) (*ListPublicDashboardsOK, error)
 
@@ -99,9 +102,6 @@ type ClientService interface {
 
 	QueryPublicDashboard(panelID int64, accessToken string, opts ...ClientOption) (*QueryPublicDashboardOK, error)
 	QueryPublicDashboardWithParams(params *QueryPublicDashboardParams, opts ...ClientOption) (*QueryPublicDashboardOK, error)
-
-	RestoreDashboardVersionByID(dashboardID int64, body *models.RestoreDashboardVersionCommand, opts ...ClientOption) (*RestoreDashboardVersionByIDOK, error)
-	RestoreDashboardVersionByIDWithParams(params *RestoreDashboardVersionByIDParams, opts ...ClientOption) (*RestoreDashboardVersionByIDOK, error)
 
 	RestoreDashboardVersionByUID(uid string, body *models.RestoreDashboardVersionCommand, opts ...ClientOption) (*RestoreDashboardVersionByUIDOK, error)
 	RestoreDashboardVersionByUIDWithParams(params *RestoreDashboardVersionByUIDParams, opts ...ClientOption) (*RestoreDashboardVersionByUIDOK, error)
@@ -1013,6 +1013,50 @@ func (a *Client) ImportDashboardWithParams(params *ImportDashboardParams, opts .
 }
 
 /*
+InterpolateDashboard interpolates dashboard this is an experimental endpoint under dashboard library or suggested dashboards feature flags and is subject to change
+*/
+func (a *Client) InterpolateDashboard(opts ...ClientOption) (*InterpolateDashboardOK, error) {
+	params := NewInterpolateDashboardParams()
+	return a.InterpolateDashboardWithParams(params, opts...)
+}
+
+func (a *Client) InterpolateDashboardWithParams(params *InterpolateDashboardParams, opts ...ClientOption) (*InterpolateDashboardOK, error) {
+	if params == nil {
+		params = NewInterpolateDashboardParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "interpolateDashboard",
+		Method:             "POST",
+		PathPattern:        "/dashboards/interpolate",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http", "https"},
+		Params:             params,
+		Reader:             &InterpolateDashboardReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		if opt != nil {
+			opt(op)
+		}
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*InterpolateDashboardOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for interpolateDashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 ListPublicDashboards Get list of public dashboards
 */
 func (a *Client) ListPublicDashboards(opts ...ClientOption) (*ListPublicDashboardsOK, error) {
@@ -1144,52 +1188,6 @@ func (a *Client) QueryPublicDashboardWithParams(params *QueryPublicDashboardPara
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for queryPublicDashboard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-RestoreDashboardVersionByID restores a dashboard to a given dashboard version
-
-Please refer to [updated API](#/dashboards/restoreDashboardVersionByUID) instead
-*/
-func (a *Client) RestoreDashboardVersionByID(dashboardID int64, body *models.RestoreDashboardVersionCommand, opts ...ClientOption) (*RestoreDashboardVersionByIDOK, error) {
-	params := NewRestoreDashboardVersionByIDParams().WithBody(body).WithDashboardID(dashboardID)
-	return a.RestoreDashboardVersionByIDWithParams(params, opts...)
-}
-
-func (a *Client) RestoreDashboardVersionByIDWithParams(params *RestoreDashboardVersionByIDParams, opts ...ClientOption) (*RestoreDashboardVersionByIDOK, error) {
-	if params == nil {
-		params = NewRestoreDashboardVersionByIDParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "restoreDashboardVersionByID",
-		Method:             "POST",
-		PathPattern:        "/dashboards/id/{DashboardID}/restore",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http", "https"},
-		Params:             params,
-		Reader:             &RestoreDashboardVersionByIDReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		if opt != nil {
-			opt(op)
-		}
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*RestoreDashboardVersionByIDOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for restoreDashboardVersionByID: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
